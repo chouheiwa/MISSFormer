@@ -66,6 +66,7 @@ if args.dataset == "Synapse":
 
 
 if __name__ == "__main__":
+    print(torch.cuda.current_device())
     os.environ["CUDA_VISIBLE_DEVICES"] = '0'
     if not args.deterministic:
         cudnn.benchmark = True
