@@ -1,11 +1,9 @@
-conda activate MISSFormer
-
 python test.py \
 --dataset Synapse \
 --is_savenii \
---root_path ~/data/dataset/Synapse/ \
+--volume_path ~/data/dataset/Synapse/ \
 --output_dir ~/data/results/MISSFormer/Synapse \
+--max_epoch 400 \
 --base_lr 0.05 \
 --img_size 224 \
---batch_size 24 \
---max_epoch 400
+--batch_size 24

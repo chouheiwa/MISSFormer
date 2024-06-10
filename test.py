@@ -70,7 +70,7 @@ def inference(args, model, test_save_path=None):
     logging.info("{} test iterations per epoch".format(len(testloader)))
     model.eval()
     metric_list = 0.0
-    for i_batch, sampled_batch in tqdm(enumerate(testloader)):
+    for i_batch, sampled_batch in enumerate(tqdm(testloader)):
         h, w = sampled_batch["image"].size()[2:]
         image, label, case_name = sampled_batch["image"], sampled_batch["label"], sampled_batch['case_name'][0]
         metric_i = test_single_volume(image, label, model, classes=args.num_classes, patch_size=[args.img_size, args.img_size],
@@ -87,6 +87,7 @@ def inference(args, model, test_save_path=None):
 
 
 if __name__ == "__main__":
+    print(torch.cuda.current_device())
     os.environ["CUDA_VISIBLE_DEVICES"] = '0'
     if not args.deterministic:
         cudnn.benchmark = True
@@ -124,9 +125,7 @@ if __name__ == "__main__":
     print("self trained swin unet",msg)
     snapshot_name = snapshot.split('/')[-1]
 
-    log_folder = './test_log/test_log_'
-    os.makedirs(log_folder, exist_ok=True)
-    logging.basicConfig(filename=log_folder + '/'+snapshot_name+".txt", level=logging.INFO, format='[%(asctime)s.%(msecs)03d] %(message)s', datefmt='%H:%M:%S')
+    logging.basicConfig(filename=os.path.join(args.output_dir, snapshot_name + ".log"), level=logging.INFO, format='[%(asctime)s.%(msecs)03d] %(message)s', datefmt='%H:%M:%S')
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
     logging.info(str(args))
     logging.info(snapshot_name)
